@@ -14,7 +14,7 @@ def search_url(**kwargs):
 
 
 
-def get_autoru_offers(vendor,model):
+def get_autoru_offers():
     u = search_url()
 
     response = requests.get(u)
@@ -32,9 +32,9 @@ def get_autoru_offers(vendor,model):
 
     autos = pd.DataFrame(list_autos)
     # Правим датасет
-    autos = autos.drop('image', 1 )
-    autos = autos.drop('availability', 1)
-    autos = autos.drop('priceCurrency', 1)
+    autos = autos.drop(['image','availability','priceCurrency','numberOfDoors', 'vehicleConfiguration'], 1 )
+    autos['site']='Auto.ru'
+
 
     return print(autos)
 
@@ -46,5 +46,5 @@ def get_autoru_offers(vendor,model):
 
 if __name__ == '__main__':
 
-    print(get_autoru_offers('ford','focus'))
+    print(get_autoru_offers())
 

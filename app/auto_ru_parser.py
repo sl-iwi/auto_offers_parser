@@ -24,16 +24,21 @@ def get_autoru_offers():
     list_autos = []
     for i in range(len(listitems)):
         offer = {}
+        # parse ['bodyType', 'brand', 'color', 'fuelType', 'modelDate', 'name', 'productionDate', 'vehicleTransmission', 'price', 'url', 'engineDisplacement', 'enginePower', ]
         for meta in listitems[i].find_all("meta"):
             key = meta.get('itemprop')
             value = meta.get('content')
             offer.update({key: value})
+        # parse mileage
+        offer.update({'mileage': listitems[i].findChild('div', {'class': 'ListingItem-module__kmAge'}).text})
+
         list_autos.append(offer)
 
     autos = pd.DataFrame(list_autos)
     # Правим датасет
-    autos = autos.drop(['image','availability','priceCurrency','numberOfDoors', 'vehicleConfiguration'], 1 )
+    autos = autos.drop(['image', 'availability', 'priceCurrency', 'numberOfDoors', 'vehicleConfiguration'], 1)
     autos['site']='Auto.ru'
+
 
 
     return print(autos)

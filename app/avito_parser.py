@@ -11,25 +11,30 @@ def search_url(**kwargs):
     return url
 
 
-
-
 def get_avito_offers():
     u = search_url()
     response = requests.get(u)
     soup = BeautifulSoup(response.content.decode('utf-8'), 'html.parser')
     offers = soup.findAll('div', {'class': 'item__line'})
     list_autos = []
-    for i in range(len(offers)):
+    for data in offers:
         # Mileage, bodytype, EnginePower, fueltype,  vehicleTransmission
-        keys = ['mileage', 'EnginePower', 'bodytype' 'privod','fueltype']
-        params = (offers[i].findChild('div', {'class', 'specific-params specific-params_block'}).text).split(',')
-        price = offers[i].findChild('span', {'class', 'price price_highlight'})
+        keys = ['mileage', 'EnginePower', 'bodytype', 'privod','fueltype']
+        values = (data.findChild('div', {'class': 'specific-params specific-params_block'}).text).split(',')
+        params = dict(zip(keys, values))
+
+        url = 'https://avito.ru' + data.findChild('a', {'class': 'snippet-link'}, href = True)['href']
+        params.update({'url': url})
 
 
-
+        price = data.findChild('span', {'itemprop': 'price'})
+        if price is not None:
+            params.update({'price': price.text})
 
         list_autos.append(params)
-    return list_autos
+    autos = pd.DataFrame(list_autos)
+    return autos
+
 
 if __name__ == '__main__':
 

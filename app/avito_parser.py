@@ -18,14 +18,22 @@ def get_avito_offers():
     offers = soup.findAll('div', {'class': 'item__line'})
     list_autos = []
     for data in offers:
+        # brand
+        brand = ((data.findChild('a', {'itemprop': 'url'}).text).split(',')).pop(0)
+        params.update({'brand': brand})
+
         # Mileage, bodytype, EnginePower, fueltype,  vehicleTransmission
         keys = ['mileage', 'EnginePower', 'bodytype', 'privod','fueltype']
         values = (data.findChild('div', {'class': 'specific-params specific-params_block'}).text).split(',')
         params = dict(zip(keys, values))
 
+        # offer url
         url = 'https://avito.ru' + data.findChild('a', {'class': 'snippet-link'}, href = True)['href']
         params.update({'url': url})
 
+        # productionDate
+        productionDate = ((data.findChild('a', {'itemprop': 'url'}).text).split(',')).pop(1)
+        params.update({'productionDate':productionDate})
 
         price = data.findChild('span', {'itemprop': 'price'})
         if price is not None:

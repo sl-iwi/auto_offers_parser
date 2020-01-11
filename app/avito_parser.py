@@ -33,6 +33,7 @@ def get_avito_offers():
 
         list_autos.append(params)
     autos = pd.DataFrame(list_autos)
+    autos['site']='Avito'
     return autos
 
 

@@ -6,14 +6,14 @@ import pandas as pd
 
 
 def search_url(**kwargs):
+    location = 'voronezh'
     vendor = 'ford'
     model = 'focus'
-    url = f"https://auto.ru/voronezh/cars/{vendor}/{model}/used"
+    url = f"https://auto.ru/{location}/cars/{vendor}/{model}/used"
     return url
 
 
-
-
+# this func returns dataframe with offers.
 def get_autoru_offers():
     u = search_url()
 
@@ -38,8 +38,6 @@ def get_autoru_offers():
     # Правим датасет
     autos = autos.drop(['image', 'availability', 'priceCurrency', 'numberOfDoors', 'vehicleConfiguration'], 1)
     autos['site']='Auto.ru'
-
-
 
     return print(autos)
 
